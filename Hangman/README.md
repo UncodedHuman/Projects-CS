@@ -48,6 +48,7 @@ Libraries that will install depending on the user's operating system:
 Any key aside from *spacebar* is rejected, until *spacebar* is pressed. Exit with *Ctrl + C*
 
 ![input](https://i.ibb.co/qW7rDTJ/Screenshot-2024-07-08-104925.png)
+
 Screen cleared, repeatedly asking for input until **1-14** is inputted.
 
 Game play **starts**, user continuously enter a guess (a letter or word) until out of tries.
