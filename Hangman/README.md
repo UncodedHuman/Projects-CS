@@ -53,11 +53,13 @@ Screen cleared, repeatedly asking for input until **1-14** is inputted.
 Game play **starts**, user continuously enter a guess (a letter or word) until out of tries.
 
 ![ScreenRecording](https://private-user-images.githubusercontent.com/109835189/346509415-0998c89b-161d-4ffe-9ba9-2905f3632f45.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjA0MzE4MTksIm5iZiI6MTcyMDQzMTUxOSwicGF0aCI6Ii8xMDk4MzUxODkvMzQ2NTA5NDE1LTA5OThjODliLTE2MWQtNGZmZS05YmE5LTI5MDVmMzYzMmY0NS5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzA4JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcwOFQwOTM4MzlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01OGM2OWUxZWMyMTZmNjk3YjU0ZTE4NTUyYTg2MmNhNDkxY2IzZTFhMzVjNzExMjZjMTUwYjBhZTJiNDBlZWFlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.k1TRyyJ7Hx1V83M2GZeFz95a9ZKglYJY8SrBRZ9mhFY)
+
 If game is won, user will be asked whether they would like to play again. 
 
 
 ## Scissors, Paper, Rock
 If game is lost, program asks whether to activate a mini-game.
+
 ![initialize](https://i.ibb.co/pr72P05/Screenshot-2024-07-08-114244.png)
 
 Mini-game **start**, user is asked to input "rock", "paper", or "scissors". Then computer's choice and player's choice is compared and animated.
@@ -80,6 +82,7 @@ If user don't want to play again, they're presented a "Thank you" screen.
 - Generates **leveled_list** containing all words same length as inputted from user and select one randomly, storing in **word**.
 - **initilize()** the Hangman game.
 - Check whether user would like to play again, continuouesly clearing out terminal with **clear()**. Repeatedly asking until receving "Y" or "N". If "Y" **runs again**. If "N":
+
 ![no](https://i.ibb.co/CKHQwhJ/Screenshot-2024-07-08-164026.png)
 
 ## get_list()
@@ -118,7 +121,9 @@ Main core function of the game. Takes in parameters **w** which is word for play
 
 ## hangman_image(guess_left)
 Stores different frames of **Hangman-stages**
+
 ![examples](https://i.ibb.co/X450BQH/carbon-1.png)
+
 > Example: Stage 1 (7 guesses left)
 
 Taking in the amount guesses left and returns the according frame. In-case of IndexError or ValueError, raise.
@@ -131,7 +136,10 @@ Taking in the amount guesses left and returns the according frame. In-case of In
 
 ## mini_chance_arts(input_player, input_computer)
 Stores different frames of **Mini-game-stages**.
-![image](https://i.ibb.co/Ch1X23G/carbon-2.png) with lists, element [0] for player's input, element [1] for computer's input.
+
+![image](https://i.ibb.co/Ch1X23G/carbon-2.png) 
+
+with lists, element [0] for player's input, element [1] for computer's input.
 - Again raise Errors if inputs not in Options ("SCISSORS", "PAPER", "ROCK")
 - Runs **sleep()** and print to create animation with wait time: "Scissors... Paper.... Rock!!!"
 - Depending on **input_player** and **input_computer**, prints out the according images.
@@ -150,4 +158,5 @@ Thank you so much for taking a look at my project. Thank you the whole CS50P tea
 
 ## Written by: Son Thanh Nguyen
 https://github.com/UncodedHuman
+
 https://profile.edx.org/u/BrightLight07
