@@ -1,6 +1,8 @@
 # _Final Project for CS50P_
 ![Banner](https://i.ibb.co/fQ8DkBg/Hangman-Project.png)
+
 ![Python Language](https://img.shields.io/badge/Python-darkblue?logo=Python&logoColor=white&logoSize=5&label=made%20in)
+
 ![Build Status](https://img.shields.io/badge/v0.1-orange?label=ver)
 
 # Video Demo
