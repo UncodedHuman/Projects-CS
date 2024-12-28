@@ -27,6 +27,10 @@ discordIcon.addEventListener('click', () => {
     const iconOffsetTop = discordIcon.offsetTop;
     discordPopup.style.left = `${iconposition.left}px`;
     discordPopup.style.top =  `${iconOffsetTop - discordPopup.offsetHeight + 16}px`;
+
+    setTimeout(() => {
+        discordPopup.style.display = "none";
+    }, 10000);
 });
 
 closePopup.addEventListener('click', () => {

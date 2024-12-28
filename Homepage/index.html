@@ -15,10 +15,10 @@
             <a href = "#header" class = "logo" style="text-decoration:none">Home</a>
             <i class="fa-solid fa-bars" id="menu-btn"></i>
             <nav>
-                <a href = "#header" style="text-decoration:none">Home</a>
+                <a href = "#about" style="text-decoration:none">About</a>
+                <a href = "#contact" style="text-decoration:none">Contact</a>
                 <a href = "#" style="text-decoration:none">Skills</a>
                 <a href = "#" style="text-decoration:none">Interests</a>
-                <a href = "#contact" style="text-decoration:none">Contact</a>
                 <i class="fa-solid fa-times" id="close-btn"></i>
             </nav>
  
@@ -72,7 +72,7 @@
                         <a href = "https://www.instagram.com/sunnielight007/" target=”_blank”><i class = "fa-brands fa-instagram"></i></a>
                         <a href = "https://github.com/UncodedHuman" target=”_blank”><i class = "fa-brands fa-github"></i></a>
                         <a href = "https://www.facebook.com/sssunique7/" target=”_blank”><i class = "fa-brands fa-facebook"></i></a>
-                        <a href = "#"><i class = "fa-brands fa-linkedin"></i></a>
+                        <a href = "#"><i class = "fa-brands fa-linkedin" title="Don't have yet"></i></a>
                         <a href = "#discord" id ="discord-icon"><i class = "fa-brands fa-discord"></i></a>
                     </div>
                     <div class="discord" id="discord-popup">
@@ -82,9 +82,10 @@
                     <a href="./images/CS50P.pdf" download class= "btn btn2">Download CV</a>
                 </div>
                 <div class= "contact-right">
-                    <form>
+                    <form action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="73b46deb-30c2-4b4a-bb77-31fa4ebe1e22">
                         <input type="text" name = "Name" placeholder="John Doe" required>
-                        <input type="email" name = "email" placeholder="John.Doe@domain.com" required>
+                        <input type="email" name = "Email" placeholder="John.Doe@domain.com" required>
                         <textarea name = "Message" rows = "6" placeholder="The content of this message is..."></textarea>
                         <button class="btn" type = "submit">Submit</button>
                     </form>
@@ -96,5 +97,6 @@
         </div>
     </div>
         <script src = "index.js"></script>
+
     </body>
 </html>

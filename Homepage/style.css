@@ -169,6 +169,7 @@ span{
     margin: 3rem 1.5rem 3rem 0;
     transition: 0.3s ease;
     color: #2593e7;
+    text-decoration: none;
 }
 
 .social-icons a:hover{
