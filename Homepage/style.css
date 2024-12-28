@@ -190,6 +190,7 @@ span{
 }
 
 .btn{
+    margin-top: 2rem;
     display: inline-block;
     padding: 1rem 2.8rem;
     background-color: black;
@@ -237,6 +238,9 @@ span{
     animation: cursor 0.6s infinite;
 }
 
+.text-1{
+    margin-top: 2rem;
+}
 @keyframes cursor{
     to{
         border-left: 3px solid #2593e7;
@@ -279,4 +283,109 @@ span{
         width: 70vw;
         margin-top: 4rem;
     }
+}
+
+
+
+/* About Section */
+
+#about{
+    padding: 80px 0;
+    color: #ababab;
+}
+
+.row{
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.about-col-1{
+    flex-basis: 35%;
+}
+
+.about-col-1 img{
+    width: 70%;
+    border-radius: 15px;
+}
+
+.about-col-2{
+    flex-basis: 60%;
+}
+
+.sub-title{
+    font-size: 60px;
+    font-weight: 500;
+    color: white;
+}
+
+.text-2{
+    margin-top: 2rem;
+    font-size: 17px;
+    font-weight: 300;
+    min-width: 100px;
+}
+
+#contact {
+    padding: 50px 0;
+    color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto; 
+    padding: 0 20px;
+}
+.contact-left {
+    flex-basis: 45%; 
+}
+
+.contact-left p{
+    margin-top: 30px;
+    font-size: 15px;
+}
+.contact-left p i{
+    color: #2593e7;
+    margin-right: 15px;
+    font-size: 25px;
+}
+
+
+
+.contact-right {
+    flex-basis: 45%; 
+    display: flex;
+    flex-direction: column; 
+    gap: 15px
+}
+
+.contact-right form {
+    width: 100%; 
+}
+
+.contact-right input,
+.contact-right textarea {
+    width: 100%; 
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #2593e7; 
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.contact-right button {
+    padding: 10px 20px;
+    margin-top: 0;
+    font-size: 1rem;
+    background-color: #2593e7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.contact-right button:hover {
+    background-color: #1e7ec1; 
 }
