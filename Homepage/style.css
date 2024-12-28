@@ -39,6 +39,7 @@ header {
     z-index: 100; /* Always stay above other indexes */
 }
 
+
 .logo{
     font-size: 3rem;
     color: #2593e7;
@@ -84,20 +85,6 @@ nav a:hover, nav a.active{
 
 /* For mobile */
 @media(max-width:995px){
-    nav{
-        position: absolute;
-        display: none;
-        top: 0;
-        right: 0;
-        width: 40%;
-        border-left: 3px solid #2593e7;
-        border-bottom: 3px solid #2593e7;
-        border-bottom-left-radius: 2rem;
-        padding: 1rem solid;
-        background-color: #161616;
-        border-top: 0.1rem solid rgba(0,0,0,0.1);
-    }
-
     nav.active{
         display: block;
     }
@@ -119,6 +106,7 @@ nav a:hover, nav a.active{
 section{
     min-height: 100vh;
     padding: 5rem 9% 5rem;
+    padding-top: 0;
 }
 
 .home{
@@ -328,7 +316,7 @@ span{
 }
 
 #contact {
-    padding: 50px 0;
+    padding-top: 50px;
     color: #fff;
 }
 
@@ -343,7 +331,7 @@ span{
 
 .contact-left p{
     margin-top: 30px;
-    font-size: 15px;
+    font-size: 18px;
 }
 .contact-left p i{
     color: #2593e7;
@@ -372,10 +360,14 @@ span{
     border: 1px solid #2593e7; 
     border-radius: 5px;
     font-size: 1rem;
+    background: #262626;
+    color: white;
+    margin: 10px;
 }
 
 .contact-right button {
     padding: 10px 20px;
+    margin-left: 10px;
     margin-top: 0;
     font-size: 1rem;
     background-color: #2593e7;
@@ -386,6 +378,101 @@ span{
     transition: 0.3s ease;
 }
 
-.contact-right button:hover {
-    background-color: #1e7ec1; 
+.btn.btn2{
+    display: inline-block;
+    background: #2593e7;
+    padding: 10px 20px;
+    color: white;
+    transition: 0.3s ease;
+    border-radius: 5px
+}
+
+.btn.btn2:hover{
+    color: black;
+}
+@media (min-width: 1200px){
+    .contact-right textarea::placeholder, .contact-right input::placeholder
+{
+    font-size: 15px;
+}
+.contact-right input, .contact-right textarea
+{
+    font-size: 15px;
+}
+}
+
+.copyright{
+    width:100%;
+    text-align: center;
+    padding: 15px 0;
+    background: #262626;
+    font-weight: 300;
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+
+/* For smaller screen sizes */
+nav .fa-solid{
+    display: none;
+}
+#menu-btn{
+    display: none;
+}
+@media only screen and (max-width:900px){
+    nav {
+        background: #262626;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 150px;
+        height: 100vh;
+        z-index: 200;
+        padding-top: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        text-align: center;
+    }
+    nav.active {
+        transform: translateX(0);
+    }
+
+    nav a {
+        display: block;
+        justify-content: center;
+        padding: 10px 0;
+        width: 100%;
+    }
+
+  
+    #menu-btn {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        display: block;
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+
+    #close-btn {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        display: none; 
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    nav.active #close-btn {
+        display: block;
+    }
+
+    nav.active #menu-btn {
+        display: none;
+    }
 }
