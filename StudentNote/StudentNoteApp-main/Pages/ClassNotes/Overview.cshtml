@@ -1,0 +1,204 @@
+@page
+@model StudentNoteApp.Pages.ClassNotes.OverviewModel
+@{
+    ViewData["Title"] = "Class Notes Overview";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1 class="h3 mb-0">Class Credits Overview</h1>
+        </div>
+        <div class="col-md-6">
+            <form method="get" class="d-flex justify-content-md-end">
+                <div class="input-group" style="max-width: 300px;">
+                    <select name="year" class="form-select" onchange="this.form.submit()">
+                        <option value="" disabled selected>Select Year</option>
+                        @foreach (var year in Model.Years)
+                        {
+                            <option value="@year" selected="@(year == Model.SelectedYear)">Year @year</option>
+                        }
+                    </select>
+                    @if (Model.SelectedYear.HasValue)
+                    {
+                        <a href="/ClassNotes/Overview" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.SelectedYear.HasValue)
+    {
+        if (!Model.StudentNotes.Any())
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>No notes found for Year @Model.SelectedYear
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Year @Model.SelectedYear Credits Summary</h5>
+                                <div>
+                                    <button class="btn btn-primary me-2" onclick="generatePDF()">
+                                        <i class="bi bi-file-pdf me-2"></i>Save as PDF
+                                    </button>
+                                    <a href="/ClassNotes/Detail?year=@Model.SelectedYear" class="btn btn-outline-primary">
+                                        <i class="bi bi-list-ul me-2"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th>Student</th>
+                                        <th>Student Number</th>
+                                        <th class="text-end">Total Credits</th>
+                                        <th style="width: 100px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var rank = 1;
+                                    }
+                                    @foreach (var student in Model.StudentNotes)
+                                    {
+                                        <tr>
+                                            <td class="text-muted">@(rank++)</td>
+                                            <td>
+                                                <div class="fw-semibold">@student.StudentName</div>
+                                            </td>
+                                            <td>@student.StudentNumber</td>
+                                            <td class="text-end">
+                                                <span class="badge bg-primary rounded-pill fs-6">@student.TotalNumericCredits</span>
+                                            </td>
+                                            <td>
+                                                <a href="/ClassNotes/Detail?year=@Model.SelectedYear&studentId=@student.StudentId"
+                                                    class="btn btn-sm btn-outline-secondary me-1">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <a href="/EditStudent/EditStudent?id=@student.StudentId"
+                                                        class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="display-1 text-muted mb-4">
+                <i class="bi bi-journal-text"></i>
+            </div>
+            <h2 class="h4 text-muted">Select a year to view credits overview</h2>
+            <p class="text-muted">Choose a year from the dropdown above to view student credits summary.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Add shadow to cards on hover
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.remove('shadow-sm');
+                card.classList.add('shadow');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('shadow');
+                card.classList.add('shadow-sm');
+            });
+        });
+
+        // PDF Generation
+        window.jsPDF = window.jspdf.jsPDF;
+
+        async function generatePDF() {
+            const content = document.querySelector('.card');
+            const year = document.querySelector('select[name="year"]').value;
+
+            // Show loading state
+            const button = document.querySelector('.btn-primary');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating PDF...';
+            button.disabled = true;
+
+            try {
+                // Create PDF
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const scale = 1.5;
+                const canvas = await html2canvas(content, {
+                    scale: scale,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                // Calculate dimensions
+                const imgWidth = 550;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                let heightLeft = imgHeight;
+                let position = 20; // Starting position
+
+                // Add title
+                pdf.setFontSize(16);
+                pdf.text(`Class Credits Summary - Year ${year}`, 40, position);
+                position += 30;
+
+                // Add date
+                pdf.setFontSize(12);
+                pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 40, position);
+                position += 30;
+
+                // Convert the canvas to an image
+                const imgData = canvas.toDataURL('image/png');
+
+                // Add image to PDF (first page)
+                pdf.addImage(imgData, 'PNG', 20, position, imgWidth, imgHeight);
+                heightLeft -= (pdfHeight - position);
+
+                // Add new pages if content is longer than one page
+                while (heightLeft >= 0) {
+                    position = 20;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 20, position - imgHeight + heightLeft, imgWidth, imgHeight);
+                    heightLeft -= (pdfHeight - position);
+                }
+
+                // Save the PDF
+                pdf.save(`class_credits_summary_year_${year}.pdf`);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('An error occurred while generating the PDF. Please try again.');
+            } finally {
+                // Restore button state
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+    </script>
+}

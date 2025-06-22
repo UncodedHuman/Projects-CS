@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="calculator">
+            <form onsubmit="event.preventDefault()"></form>
+            <form>
+                <div class = "display">
+                    <textarea id="display" readonly></textarea>
+                </div>
+                <div>
+                    <button type="button" onclick="clearDisplay()" class ="operator-btn">AC</button>
+                    <button type="button" onclick="deleteChar()" class ="operator-btn">DEL</button>
+                    <button type="button" onclick="fetchAns()" class ="operator-btn">ANS</button>          
+                    <button type="button" onclick="appendToDisplay('/', 'operator')" class ="operator-btn">/</button>
+                </div>
+                <div>
+                    <button type="button" onclick="appendToDisplay('7', 'num')">7</button>
+                    <button type="button" onclick="appendToDisplay('8', 'num')">8</button>
+                    <button type="button" onclick="appendToDisplay('9', 'num')">9</button>
+                    <button type="button" onclick="appendToDisplay('*', 'operator')" class ="operator-btn">X</button>
+                </div>
+                <div>
+                    <button type="button" onclick="appendToDisplay('4', 'num')">4</button>
+                    <button type="button" onclick="appendToDisplay('5', 'num')">5</button>
+                    <button type="button" onclick="appendToDisplay('6', 'num')">6</button>
+                    <button type="button" onclick="appendToDisplay('-', 'operator')" class ="operator-btn">-</button>
+                </div>
+                <div>
+                    <button type="button" onclick="appendToDisplay('1', 'num')">1</button>
+                    <button type="button" onclick="appendToDisplay('2', 'num')">2</button>
+                    <button type="button" onclick="appendToDisplay('3', 'num')">3</button>
+                    <button type="button" onclick="appendToDisplay('+', 'operator')" class ="operator-btn">+</button>
+                </div>
+                <div>
+                    <button type="button" onclick="appendToDisplay('0', 'num')">0</button>
+                    <button type="button" onclick="appendToDisplay('.', 'num')">.</button>
+                    <button type="button" onclick="appendToDisplay(`*10`, 'operator')">x10</button>
+                    <button type="button" onclick = "calculate()" class ="operator-btn">=</button>
+                </div>
+            </form>
+
+            
+        </div>
+    </div>
+    
+
+    <script src="index.js"></script>
+</body>
+</html>

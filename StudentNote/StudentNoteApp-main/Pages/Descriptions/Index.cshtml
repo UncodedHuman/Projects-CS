@@ -1,0 +1,79 @@
+@page
+@model StudentNoteApp.Pages.Descriptions.IndexModel
+@{
+    ViewData["Title"] = "Descriptions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Descriptions</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Add New Description
+        </a>
+    }
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created</th>
+                        <th>Last Modified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var description in Model.Descriptions)
+                    {
+                        <tr>
+                            <td>@description.Name</td>
+                            <td>
+                                @description.CreatedDateTime.ToString("g")
+                                by @description.CreatedBy
+                            </td>
+                            <td>
+                                @(description.ModifiedDateTime?.ToString("g") ?? "Never")
+                                by @description.ModifiedBy
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-page="./Details" asp-route-id="@description.Id"
+                                        class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-page="./Edit" asp-route-id="@description.Id"
+                                        class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm"
+                                        onclick="confirmDelete(@description.Id)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<form id="deleteForm" method="post" asp-page-handler="Delete">
+    <input type="hidden" id="descriptionId" name="id" />
+</form>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            if (confirm('Are you sure you want to delete this description?')) {
+                document.getElementById('descriptionId').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
+}

@@ -1,0 +1,121 @@
+@page
+@model StudentNoteApp.Pages.Subjects.DetailsModel
+@{
+    ViewData["Title"] = "Subject Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Subjects/Index">Subjects</a></li>
+                    <li class="breadcrumb-item active">@Model.Subject.Name</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="display-6 text-primary mb-3">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <h2 class="h4">@Model.Subject.Name</h2>
+                        <p class="text-muted mb-0">Total Notes: @Model.Subject.Notes.Count</p>
+                    </div>
+
+                    <div class="text-muted small mb-4">
+                        <div class="mb-1">
+                            <strong>Created:</strong> @Model.Subject.CreatedDateTime.ToString("g") by
+                            @Model.Subject.CreatedBy
+                        </div>
+                        @if (Model.Subject.ModifiedDateTime.HasValue)
+                        {
+                            <div>
+                                <strong>Last Modified:</strong> @Model.Subject.ModifiedDateTime.Value.ToString("g") by
+                                @Model.Subject.ModifiedBy
+                            </div>
+                        }
+                    </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="d-grid gap-2">
+                            <a href="/Subjects/Edit?id=@Model.Subject.Id" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil me-2"></i>Edit Subject
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete()">
+                                <i class="bi bi-trash me-2"></i>Delete Subject
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h3 class="h5 mb-0">Notes History</h3>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Subject.Notes.Any())
+                    {
+                        <div class="text-center py-4">
+                            <div class="display-6 text-muted mb-3">
+                                <i class="bi bi-journal"></i>
+                            </div>
+                            <p class="text-muted">No notes found for this subject.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Student</th>
+                                        <th>Description</th>
+                                        <th>Credit</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var note in Model.Subject.Notes.OrderByDescending(n => n.Date))
+                                    {
+                                        <tr>
+                                            <td>@note.Date.ToShortDateString()</td>
+                                            <td>@note.Student.LastName, @note.Student.FirstName</td>
+                                            <td>@note.Description.Name</td>
+                                            <td>@note.Credit.Value</td>
+                                            <td>@note.Comment</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="deleteForm" method="post" asp-page-handler="Delete" class="d-none">
+    <input type="hidden" name="id" value="@Model.Subject.Id" />
+</form>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            if (confirm('Are you sure you want to delete this subject? This action cannot be undone.')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
+}

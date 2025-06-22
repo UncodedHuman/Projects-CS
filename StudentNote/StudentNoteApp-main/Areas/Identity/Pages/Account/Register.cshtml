@@ -1,0 +1,87 @@
+﻿@page
+@model RegisterModel
+@using StudentNoteApp.Constants
+@{
+    ViewData["Title"] = "Create New User";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">@ViewData["Title"]</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Add a new user to the system</p>
+
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input asp-for="Input.IsExternalUser" class="form-check-input" id="isExternalUser" />
+                            <label asp-for="Input.IsExternalUser" class="form-check-label">External User (Google
+                                Sign-in)</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="fullNameGroup">
+                        <label asp-for="Input.FullName" class="form-label">Full Name</label>
+                        <input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" />
+                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username"
+                            aria-required="true" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3" id="passwordGroup">
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <input asp-for="Input.Password" class="form-control" type="password" autocomplete="new-password"
+                            aria-required="true" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Role" class="form-label">Role</label>
+                        <select asp-for="Input.Role" class="form-select" aria-required="true">
+                            <option value="">Select a role</option>
+                            @foreach (var role in RoleConstants.AllRoles)
+                            {
+                                <option value="@role">@role</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.Role" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button id="registerSubmit" type="submit" class="btn btn-primary">Create Account</button>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Toggle password field visibility based on external user checkbox
+        document.getElementById('isExternalUser').addEventListener('change', function () {
+            const passwordGroup = document.getElementById('passwordGroup');
+            passwordGroup.style.display = this.checked ? 'none' : 'block';
+
+            // Remove password validation when external user is selected
+            const passwordInput = document.querySelector('input[name="Input.Password"]');
+            if (this.checked) {
+                passwordInput.removeAttribute('required');
+            } else {
+                passwordInput.setAttribute('required', 'required');
+            }
+        });
+    </script>
+}

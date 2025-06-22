@@ -1,0 +1,203 @@
+@page
+@model StudentNoteApp.Pages.ClassNotesModel
+@{
+    ViewData["Title"] = "Class Notes";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1 class="h3 mb-0">Class Notes Overview</h1>
+        </div>
+        <div class="col-md-6">
+            <form method="get" class="d-flex justify-content-md-end">
+                <div class="input-group" style="max-width: 300px;">
+                    <select name="year" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Years</option>
+                        @foreach (var year in Model.Years)
+                        {
+                            <option value="@year" selected="@(year == Model.SelectedYear)">Year @year</option>
+                        }
+                    </select>
+                    @if (Model.SelectedYear.HasValue)
+                    {
+                        <a href="/ClassNotes" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.StudentNotes.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            @if (Model.SelectedYear.HasValue)
+            {
+                <text>No notes found for Year @Model.SelectedYear</text>
+            }
+            else
+            {
+                <text>No notes found</text>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="mb-4 d-flex justify-content-end gap-2">
+            <a href="/ClassNotes" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Overview
+            </a>
+            <button class="btn btn-primary" onclick="generatePDF()">
+                <i class="bi bi-file-pdf me-2"></i>Save as PDF
+            </button>
+        </div>
+        <div id="notesContent">
+            <div class="row">
+                @foreach (var student in Model.StudentNotes)
+                {
+                    <div class="col-12 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-white py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-0">@student.StudentName</h5>
+                                        <small class="text-muted">@student.StudentNumber</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <h6 class="mb-0">Total Credits</h6>
+                                        <span class="badge bg-primary rounded-pill fs-6">@student.TotalNumericCredits</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Subject</th>
+                                            <th>Description</th>
+                                            <th>Credit</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var note in student.Notes)
+                                        {
+                                            <tr>
+                                                <td>@note.Date.ToString("yyyy-MM-dd")</td>
+                                                <td>@note.Subject</td>
+                                                <td>@note.Description</td>
+                                                <td>
+                                                    <span class="@(note.IsNumericCredit ? "text-primary" : "")">
+                                                        @note.Credit
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(note.Comment))
+                                                    {
+                                                        <span class="text-muted">@note.Comment</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Add shadow to cards on hover
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.remove('shadow-sm');
+                card.classList.add('shadow');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('shadow');
+                card.classList.add('shadow-sm');
+            });
+        });
+
+        // PDF Generation
+        window.jsPDF = window.jspdf.jsPDF;
+
+        async function generatePDF() {
+            const content = document.getElementById('notesContent');
+            const year = document.querySelector('select[name="year"]').value;
+            const yearText = year ? `Year ${year}` : 'All Years';
+
+            // Show loading state
+            const button = document.querySelector('.btn-primary');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating PDF...';
+            button.disabled = true;
+
+            try {
+                // Create PDF
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const scale = 1.5;
+                const canvas = await html2canvas(content, {
+                    scale: scale,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                // Calculate dimensions
+                const imgWidth = 550;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                let heightLeft = imgHeight;
+                let position = 20; // Starting position
+
+                // Add title
+                pdf.setFontSize(16);
+                pdf.text(`Class Notes - ${yearText}`, 40, position);
+                position += 30;
+
+                // Add date
+                pdf.setFontSize(12);
+                pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 40, position);
+                position += 30;
+
+                // Convert the canvas to an image
+                const imgData = canvas.toDataURL('image/png');
+
+                // Add image to PDF (first page)
+                pdf.addImage(imgData, 'PNG', 20, position, imgWidth, imgHeight);
+                heightLeft -= (pdfHeight - position);
+
+                // Add new pages if content is longer than one page
+                while (heightLeft >= 0) {
+                    position = 20;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 20, position - imgHeight + heightLeft, imgWidth, imgHeight);
+                    heightLeft -= (pdfHeight - position);
+                }
+
+                // Save the PDF
+                const fileName = year ? `class_notes_year_${year}.pdf` : 'class_notes_all_years.pdf';
+                pdf.save(fileName);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('An error occurred while generating the PDF. Please try again.');
+            } finally {
+                // Restore button state
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+    </script>
+}

@@ -1,0 +1,46 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+/*starts*/
+body {
+  margin-bottom: 60px;
+  background: url("https://thamesbritishschool.pl/app/uploads/sites/4/2023/03/2-5I3A1726.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+}
+
+.display-4.mb-3{
+  text-shadow: 3px 3.5px #aeadad;
+  font-family: "Proxima Nova", "Helvetica Neue", Helvetica, sans-serif;;
+}
+#logoutForm .nav-link {
+  padding-bottom: 9px !important;
+}
+option:disabled:not(:checked) {
+  color: #000000;
+  background-color: #bcbcbc;
+  font-weight: 510;
+}
+option[disabled][selected] {
+  color: #aaaaaa;
+  font-weight: 100;
+  background-color: white;
+}

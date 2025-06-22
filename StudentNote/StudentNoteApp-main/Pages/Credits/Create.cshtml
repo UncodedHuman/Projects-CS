@@ -1,0 +1,59 @@
+@page
+@model StudentNoteApp.Pages.Credits.CreateModel
+@{
+    ViewData["Title"] = "Add Credit";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="./Index">Credits</a></li>
+            <li class="breadcrumb-item active">Add New Credit</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Add New Credit</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label asp-for="Credit.Value" class="form-label">Value</label>
+                            <input asp-for="Credit.Value" class="form-control" />
+                            <span asp-validation-for="Credit.Value" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Credit.DisplayText" class="form-label">Display Text</label>
+                            <input asp-for="Credit.DisplayText" class="form-control" />
+                            <span asp-validation-for="Credit.DisplayText" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Credit.Description" class="form-label">Description</label>
+                            <textarea asp-for="Credit.Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Credit.Description" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input asp-for="Credit.IsNumeric" class="form-check-input" type="checkbox" />
+                                <label asp-for="Credit.IsNumeric" class="form-check-label">Is Numeric</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

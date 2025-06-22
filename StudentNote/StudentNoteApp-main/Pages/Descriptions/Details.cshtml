@@ -1,0 +1,63 @@
+@page "{id:int}"
+@model StudentNoteApp.Pages.Descriptions.DetailsModel
+@{
+    ViewData["Title"] = "Description Details";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="./Index">Descriptions</a></li>
+            <li class="breadcrumb-item active">Description Details</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Description Details</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Name</dt>
+                        <dd class="col-sm-9">@Model.Description.Name</dd>
+
+                        <dt class="col-sm-3">Created</dt>
+                        <dd class="col-sm-9">
+                            @Model.Description.CreatedDateTime.ToString("g") by @Model.Description.CreatedBy
+                        </dd>
+
+                        <dt class="col-sm-3">Last Modified</dt>
+                        <dd class="col-sm-9">
+                            @(Model.Description.ModifiedDateTime?.ToString("g") ?? "Never") by
+                            @Model.Description.ModifiedBy
+                        </dd>
+                    </dl>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <div>
+                            <a asp-page="./Index" class="btn btn-secondary me-2">Back to List</a>
+                            <a asp-page="./Edit" asp-route-id="@Model.Description.Id" class="btn btn-primary">Edit</a>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+                    </div>
+
+                    <form id="deleteForm" method="post" asp-page-handler="Delete">
+                        <input type="hidden" asp-for="Description.Id" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            if (confirm('Are you sure you want to delete this description?')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
+}

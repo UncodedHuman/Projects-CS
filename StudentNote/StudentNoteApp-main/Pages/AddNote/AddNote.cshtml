@@ -1,0 +1,241 @@
+@page
+@model StudentNoteApp.Pages.AddNoteModel
+@{
+    ViewData["Title"] = "Add Note";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @if (TempData["Message"] != null)
+            {
+                var messageType = TempData["MessageType"]?.ToString() ?? "info";
+                <div class="alert alert-@messageType alert-dismissible fade show mb-4" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <i class="bi bi-journal-plus display-5 text-primary"></i>
+                        </div>
+                        <h1 class="h3">Add New Note</h1>
+                        <p class="text-muted">Create a new note entry</p>
+                    </div>
+
+                    @if (!ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form method="post" id="addNoteForm">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.SelectedYear" id="yearSelect" class="form-select" required>
+                                        <option value="" disabled selected>Select a year</option>
+                                        @foreach (var year in Model.Years)
+                                        {
+                                            <option value="@year">Year @year</option>
+                                        }
+                                    </select>
+                                    <label for="yearSelect">Year</label>
+                                    <div class="invalid-feedback">Please select a year</div>
+                                    <span asp-validation-for="Input.SelectedYear" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.StudentId" id="studentSelect" class="form-select" required
+                                        disabled>
+                                        <option value="">Select a student</option>
+                                    </select>
+                                    <label asp-for="Input.StudentId">Student</label>
+                                    <span asp-validation-for="Input.StudentId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.SubjectId" asp-items="Model.Subjects" class="form-select"
+                                        required>
+                                        <option value=""disabled selected>Select a subject</option>
+                                    </select>
+                                    <label asp-for="Input.SubjectId">Subject</label>
+                                    <span asp-validation-for="Input.SubjectId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.DescriptionId" asp-items="Model.Descriptions"
+                                        class="form-select" required>
+                                        <option value="" disabled selected>Select a description</option>
+                                    </select>
+                                    <label asp-for="Input.DescriptionId">Description</label>
+                                    <span asp-validation-for="Input.DescriptionId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.CreditId" asp-items="Model.Credits" class="form-select"
+                                        required disabled>
+                                        <option value="" disabled selected>Select a credit</option>
+                                            @foreach (var credit in Model.Credits)
+                                            {
+                                            <!-- Embed Credit.Description in a data-attribute -->
+                                                <option value="@credit.Value" data-desc="@credit.Text.Split('|')[1]">@credit.Text.Split('|')[0]</option>
+                                            }
+                                    </select>
+                                    <label asp-for="Input.CreditId">Credit</label>
+                                    <span asp-validation-for="Input.CreditId" class="text-danger"></span>
+                                    <div id="creditError" class="text-danger mt-2" style="display: none;"></div> <!-- ADDED for none credit-description -->
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" asp-for="Input.Date" class="form-control modern-datepicker"
+                                        required placeholder="Select date..." />
+                                    <label asp-for="Input.Date">Date</label>
+                                    <span asp-validation-for="Input.Date" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <textarea asp-for="Input.Comment" class="form-control" style="height: 100px"
+                                        placeholder="Add a comment (optional)"></textarea>
+                                    <label asp-for="Input.Comment">Comment (optional)</label>
+                                    <span asp-validation-for="Input.Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitButton">
+                                <i class="bi bi-plus-circle me-2"></i>Create Note
+                            </button>
+                            <a href="/" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        // Initialize form validation
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                ignore: [],
+                highlight: function (element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            // Year select change handler
+            document.getElementById('yearSelect').addEventListener('change', function () {
+                const yearSelect = this;
+                const studentSelect = document.getElementById('studentSelect');
+                const selectedYear = yearSelect.value;
+
+                // Reset and disable student select
+                studentSelect.innerHTML = '<option value="">Select a student</option>';
+                studentSelect.disabled = true;
+
+                if (selectedYear) {
+                    // Show loading state
+                    studentSelect.innerHTML = '<option value="">Loading students...</option>';
+
+                    // Fetch students for selected year
+                    fetch(`?handler=StudentsForYear&year=${selectedYear}`)
+                        .then(response => response.json())
+                        .then(students => {
+                            studentSelect.innerHTML = '<option value="" disabled selected>Select a student</option>';
+                            students.forEach(student => {
+                                const option = new Option(`${student.lastName}, ${student.firstName} (${student.studentNumber})`, student.id);
+                                studentSelect.add(option);
+                            });
+                            studentSelect.disabled = false;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching students:', error);
+                            studentSelect.innerHTML = '<option value="">Error loading students</option>';
+                        });
+                }
+            });
+
+             // Added Function to check matching credit
+            function checkMatchingCredit() {
+                const selectedDesc = $('#Input_DescriptionId').find('option:selected').text().trim();
+                const matchingCredit = $(`#Input_CreditId option[data-desc="${selectedDesc}"]`);
+                return { selectedDesc, matchingCredit };
+            }
+
+            // ADDED Credit LOGIC HERE
+                $('#Input_DescriptionId').on('change', function() {
+                    $('#creditError').hide().text('');
+                    $('#Input_CreditId').val('');
+                    const { selectedDesc, matchingCredit } = checkMatchingCredit();
+
+                    // 3. Update UI based on current state
+                    if (matchingCredit.length) {
+                        $('#Input_CreditId').val(matchingCredit.val());
+                    } else if (selectedDesc) {
+                        $('#creditError').text(`No credits for "${selectedDesc}"`).show();
+                    }
+                });
+
+            // Initialize Flatpickr
+            flatpickr(".modern-datepicker", {
+                dateFormat: "Y-m-d",
+                defaultDate: "today",
+                enableTime: false,
+                animate: true,
+                disableMobile: "true",
+                minDate: "2000-01-01"
+            });
+
+            // prevent forever "Creating Note..."
+            // Form submission handler
+            $('#addNoteForm').on('submit', function () {
+                const form = this;
+                const submitButton = document.getElementById('submitButton');
+                const creditSelect = document.getElementById('Input_CreditId');
+                const { selectedDesc, matchingCredit } = checkMatchingCredit();
+
+                // Check if the form is valid
+                if (form.checkValidity() === false || (!matchingCredit.length && selectedDesc)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    creditSelect.disabled = false;
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Note...';
+                }
+            });
+
+            // Auto-hide alert after 5 seconds
+            setTimeout(function () {
+                $('.alert-dismissible').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+}

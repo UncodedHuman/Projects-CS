@@ -1,0 +1,119 @@
+@page
+@model StudentNoteApp.Pages.Students.DetailsModel
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Students/Index">Students</a></li>
+                    <li class="breadcrumb-item active">@Model.Student.FirstName @Model.Student.LastName</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="display-6 text-primary mb-3">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <h2 class="h4">@Model.Student.FirstName @Model.Student.LastName</h2>
+                        <p class="text-muted mb-0">Student Number: @Model.Student.StudentNumber</p>
+                        <p class="text-muted">Year: @Model.Student.Year</p>
+                    </div>
+
+                    <div class="text-muted small mb-4">
+                        <div class="mb-1">
+                            <strong>Created:</strong> @Model.Student.CreatedDateTime.ToString("g") by
+                            @Model.Student.CreatedBy
+                        </div>
+                        @if (Model.Student.ModifiedDateTime.HasValue)
+                        {
+                            <div>
+                                <strong>Last Modified:</strong> @Model.Student.ModifiedDateTime.Value.ToString("g") by
+                                @Model.Student.ModifiedBy
+                            </div>
+                        }
+                    </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="d-grid gap-2">
+                            <a href="/Students/Edit?id=@Model.Student.Id" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil me-2"></i>Edit Student
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">Notes History</h3>
+                        <a href="/ClassNotes/Detail?studentId=@Model.Student.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-journal-text me-2"></i>View Full Notes
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Notes.Any())
+                    {
+                        <div class="text-center py-4">
+                            <div class="display-6 text-muted mb-3">
+                                <i class="bi bi-journal"></i>
+                            </div>
+                            <p class="text-muted">No notes found for this student.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Subject</th>
+                                        <th>Description</th>
+                                        <th>Credit</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var note in Model.Notes)
+                                    {
+                                        <tr>
+                                            <td>@note.Date.ToShortDateString()</td>
+                                            <td>@note.Subject.Name</td>
+                                            <td>@note.Description.Name</td>
+                                            <td>
+                                                <span class="badge bg-primary rounded-pill">
+                                                    @note.Credit.Value
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(note.Comment))
+                                                {
+                                                    <span class="text-muted">@note.Comment</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
