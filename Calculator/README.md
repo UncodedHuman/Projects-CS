@@ -36,7 +36,7 @@ Highlights only the important ones. The particular methods being implemented wou
 [^4]: [classList property methods](https://www.w3schools.com/jsref/prop_element_classlist.asp), [Array.unshift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift) and [Array.pop()](https://www.w3schools.com/jsref/jsref_pop.asp)
 
 # Usage
->When operating (right click index.html) ```Open with Live Server```
+>IMPORTANT: Download the **Live Server** before proceeding. Afterwards, when operating (right click index.html) ```Open with Live Server```
 
 # Calculator!
 ![startscreen](https://i.ibb.co/1tcMTNJq/Screenshot-2025-06-30-104241.png)
