@@ -40,12 +40,15 @@ Highlights only the important ones. The particular methods being implemented wou
 
 # Calculator!
 ![startscreen](https://i.ibb.co/1tcMTNJq/Screenshot-2025-06-30-104241.png)
+
 User greeted with a usual calculator interface, any *operators* and *numbers* can be pressed and added to display.
 
 ![equationScreen](https://i.ibb.co/d0B9CPM2/Screenshot-2025-06-30-105928.png)
+
 Once *"="* is pressed, a randomly generated equation is shown instead of the answer. This is the **EQUATION SCREEN** (additional feature implemented).
 
 ![ansscreen](https://i.ibb.co/tpNK5Frc/Screenshot-2025-06-30-110152.png)
+
 If pressed again, real answer shown. This is repeated if *"="* is clicked.
 
 Else, the calculator functions normally,
