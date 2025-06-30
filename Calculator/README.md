@@ -177,4 +177,5 @@ Thank you so much for taking a look at my project. Thank you the whole CS50x tea
 
 ## Written by: Son Thanh Nguyen
 https://github.com/UncodedHuman
+
 https://profile.edx.org/u/BrightLight07
